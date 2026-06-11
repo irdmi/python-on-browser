@@ -1,0 +1,154 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, sans-serif; display: flex; height: 100vh; overflow: hidden; }
+
+/* Панель редактора */
+#editor-panel {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    border-right: 2px solid #ccc;
+    transition: width 0.3s;
+}
+#editor-panel.collapsed { width: 0; overflow: hidden; border-right: none; }
+#editor-header {
+    background: #f5f5f5;
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+#code {
+    flex: 1;
+    width: 100%;
+    border: none;
+    padding: 15px;
+    font-family: 'Fira Code', monospace;
+    font-size: 14px;
+    resize: none;
+    outline: none;
+    background: #1e1e1e;
+    color: #d4d4d4;
+    tab-size: 4;
+    min-height: 200px;
+}
+
+/* Кнопки */
+button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background: #0078d4;
+    color: white;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+}
+button:hover { background: #005a9e; }
+button:active { transform: scale(0.97); }
+
+/* Блок загрузки файлов */
+#file-upload-section {
+    background: #f0f0f0;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+.upload-label {
+    background: #28a745;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+}
+.upload-label:hover { background: #218838; }
+#file-input { display: none; }
+#clear-files-btn { background: #dc3545; }
+#clear-files-btn:hover { background: #c82333; }
+#file-list {
+    width: 100%;
+    max-height: 80px;
+    overflow-y: auto;
+    font-size: 13px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.file-item {
+    background: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.file-item .remove-file {
+    color: red;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Панель вывода */
+#output-panel {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+}
+.tabs { display: flex; background: #f0f0f0; border-bottom: 1px solid #ccc; }
+.tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    font-weight: 500;
+    user-select: none;
+}
+.tab.active { border-bottom-color: #0078d4; background: #fff; }
+.tab-content { display: none; flex: 1; overflow: auto; padding: 15px; }
+.tab-content.active { display: block; }
+#console {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    font-family: 'Fira Code', monospace;
+    white-space: pre-wrap;
+    font-size: 14px;
+}
+#visual { background: white; }
+#stats {
+    background: #fafafa;
+    border-top: 1px solid #ddd;
+    padding: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    font-size: 13px;
+}
+.stat-item { display: flex; gap: 5px; }
+.stat-label { color: #555; }
+.stat-value { font-weight: 600; }
+
+/* Индикатор загрузки */
+#loader {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background: white;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    display: none;
+    z-index: 999;
+}
+
+/* Режим просмотра (только вывод) */
+body.view-mode #editor-panel { display: none; }
+body.view-mode #output-panel { width: 100%; }
+body.view-mode #edit-btn { display: inline-block; }
+#edit-btn { display: none; }
