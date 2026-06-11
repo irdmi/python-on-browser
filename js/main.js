@@ -1,11 +1,21 @@
-// main.js – инициализация приложения после загрузки страницы
+// js/main.js – инициализация приложения
 window.pythonLoaded = false;
 
-// Загрузка Pyodide
-window.loadPyodide = async function() {
+// Сохраняем оригинальную функцию loadPyodide, загруженную из CDN,
+// чтобы избежать рекурсии при переопределении.
+const originalLoadPyodide = loadPyodide;
+
+// Переопределяем глобальную функцию, используя сохранённый оригинал.
+window.loadPyodide = async function () {
     if (window.pythonLoaded) return;
     document.getElementById('loader').style.display = 'block';
-    window.pyodide = await loadPyodide({ indexURL: "https://cdn.jsdelivr.net/pyodide/v0.25.0/full/" });
+
+    // Вызываем настоящую loadPyodide из скрипта Pyodide
+    window.pyodide = await originalLoadPyodide({
+        indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.25.0/full/'
+    });
+
+    // Инициализация отображения и файлового менеджера
     runner.registerDisplay();
     fileManager.init();
     window.pythonLoaded = true;
@@ -13,16 +23,16 @@ window.loadPyodide = async function() {
 };
 
 window.addEventListener('DOMContentLoaded', async () => {
+    // Настройка интерфейса и обработчиков
     ui.initTabs();
     ui.bindEvents();
 
-    // Пытаемся загрузить код из хэша
+    // Пытаемся загрузить код из хэша (режим просмотра)
     const viewLoaded = await ui.loadFromHash();
     if (!viewLoaded) {
-        // Обычный режим – фоновую загрузку Pyodide
+        // Обычный режим – запускаем фоновую загрузку Pyodide
         window.loadPyodide();
-        // При готовности обновим список файлов (если уже были)
-        // Пока файлов нет, список пуст
+        // Обновляем список файлов (пока пустой)
         ui.refreshFileList();
     }
 });
